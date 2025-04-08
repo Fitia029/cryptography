@@ -2,206 +2,370 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        'hacker-green': '#0d8c30',
+                        'light-green': '#e6ffec',
+                        'medium-green': '#c2f0d0',
+                        'dark-green': '#0a6b25',
+                        'light-gray': '#f5f5f5',
+                        'medium-gray': '#e0e0e0',
+                        'code-bg': '#f8f8f8',
+                    },
+                    animation: {
+                        'text-pulse': 'textPulse 3s linear infinite',
+                        'scan-line': 'scanLine 2s linear infinite',
+                        'pulse-border': 'pulseBorder 2s infinite',
+                        'glitch': 'glitch 0.5s ease-in-out infinite alternate',
+                        'blink': 'blink 1s step-end infinite',
+                    },
+                    keyframes: {
+                        textPulse: {
+                            '0%, 100%': { color: '#0d8c30' },
+                            '50%': { color: '#0a6b25' },
+                        },
+                        scanLine: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' },
+                        },
+                        pulseBorder: {
+                            '0%, 100%': { borderColor: 'rgba(13, 140, 48, 0.3)' },
+                            '50%': { borderColor: 'rgba(13, 140, 48, 0.8)' },
+                        },
+                        glitch: {
+                            '0%': { transform: 'translate(0)' },
+                            '20%': { transform: 'translate(-2px, 2px)' },
+                            '40%': { transform: 'translate(-2px, -2px)' },
+                            '60%': { transform: 'translate(2px, 2px)' },
+                            '80%': { transform: 'translate(2px, -2px)' },
+                            '100%': { transform: 'translate(0)' },
+                        },
+                        blink: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
-    * {
-        margin: 0;
-        padding: 0;
-        font-family: 'Montserrat', sans-serif;
-        box-sizing: border-box;
-    }
-    body {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        background: #f4f4f4;
-    }
-    header {
-        background: linear-gradient(45deg, #6a11cb, #2575fc);
-        color: white;
-        padding: 15px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    header h1 {
-        margin: 0;
-        font-size: 24px;
-    }
-    .logout {
-        background-color: #ff4d4d;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        text-decoration: none;
-    }
-    .logout:hover {
-        background-color: #ff3333;
-    }
-    main {
-        display: flex;
-        flex: 1;
-    }
-    .chat-container {
-        flex: 2;
-        display: flex;
-        flex-direction: column;
-        padding: 20px;
-        border-right: 2px solid #dedede;
-        background-color: #fff;
-    }
-    .rooms-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        padding: 20px;
-        background: linear-gradient(to bottom, #eef2f3, #8e9eab);
-        overflow-y: auto;
-        color: #333;
-    }
-    .room-btn {
-        padding: 12px;
-        margin-bottom: 15px;
-        background: linear-gradient(45deg, #6a11cb, #2575fc);
-        color: white;
-        text-align: center;
-        border-radius: 12px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 16px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        display: block;
-    }
-    .room-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    .title {
-        margin-bottom: 20px;
-        font-size: 28px;
-        color: #333;
-    }
-    #display {
-        flex: 1;
-        border: 2px solid #dedede;
-        background-color: #fdfdfd;
-        padding: 15px;
-        overflow-y: auto;
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
-    .container input[type=text], .container input[type=submit] {
-        width: 100%;
-        padding: 12px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-    }
-    .container input[type=submit] {
-        background-color: #4CAF50;
-        color: white;
-        cursor: pointer;
-    }
-    .container input[type=submit]:hover {
-        background-color: #45a049;
-    }
-    .darker {
-        margin-bottom: 10px;
-        padding: 10px;
-        background-color: #ddd;
-        border-radius: 8px;
-        word-break: break-word;
-    }
-    .darker b {
-        font-style: italic;
-        color: #333;
-    }
-    .darker span {
-        font-size: 12px;
-        color: #999;
-    }
-    footer {
-        background-color: #333;
-        color: white;
-        text-align: center;
-        padding: 10px 0;
-        font-size: 14px;
-    }
-    /* Rendre le panneau d'affichage attrayant */
-    #display {
-        flex: 1;
-        border: 2px solid #dedede;
-        background: linear-gradient(to bottom, #ffffff, #e9eef1);
-        padding: 15px;
-        overflow-y: auto;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .darker {
-        margin-bottom: 10px;
-        padding: 15px;
-        background-color: #f7f9fc;
-        border-radius: 8px;
-        word-break: break-word;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .darker b {
-        font-style: italic;
-        color: #4a4a4a;
-    }
-    .darker span {
-        font-size: 12px;
-        color: #8c8c8c;
-    }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #0d8c30;
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0a6b25;
+        }
+        
+        /* Matrix-like background - light version */
+        .matrix-bg-light {
+            background-color: #ffffff;
+            background-image: 
+                linear-gradient(rgba(13, 140, 48, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(13, 140, 48, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        /* Scan line effect - light version */
+        .scan-line-light::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(13, 140, 48, 0.2);
+            animation: scanLine 2s linear infinite;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        /* Blinking cursor */
+        .cursor-blink::after {
+            content: "_";
+            animation: blink 1s step-end infinite;
+        }
+        
+        /* Hexagon pattern - light version */
+        .hex-pattern-light {
+            background-color: #f8f8f8;
+            background-image: 
+                radial-gradient(circle, rgba(13, 140, 48, 0.07) 1px, transparent 1px);
+            background-size: 15px 15px;
+        }
+        
+        /* Glitch effect on hover */
+        .hover-glitch:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
-<body>
-    <!-- En-tête -->
-    <header>
-        <h1>Plateforme de Chat</h1>
-        <a href="/logout" class="logout">Déconnexion</a>
-    </header>
-
-    <!-- Section principale -->
-    <main>
-        <div class="chat-container">
-            <h2 class="title">{{room}} - Groupe</h2>
-            <div id="display">
-                <p>Aucun message présent</p>
+<body class="flex flex-col h-screen bg-white text-gray-800 font-mono matrix-bg-light relative">
+    <!-- Scan line effect overlay -->
+    <div class="scan-line-light absolute inset-0 pointer-events-none"></div>
+    
+    <!-- Top status bar -->
+    <div class="bg-light-green border-b border-hacker-green/30 py-1 px-4 flex items-center justify-between text-xs">
+        <div class="flex items-center space-x-4">
+            <div class="flex items-center">
+                <div class="w-2 h-2 rounded-full bg-hacker-green animate-pulse mr-1"></div>
+                <span class="text-hacker-green font-semibold">SYSTEM ONLINE</span>
             </div>
-            <div class="container">
-                <form id="post-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="username" id="username" value="{{username}}" />
-                    <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}" />
-                    <input type="text" name="encryption_key" id="encryption_key" placeholder="Clé de chiffrement (optionnel)" />
-                    <input type="text" name="message" id="message" placeholder="Entrez votre message" />
-                    <input type="submit" value="Envoyer">
-                </form>
+            <div class="text-gray-700">PING: 23ms</div>
+            <div class="text-gray-700">UPTIME: 14d:06h:32m</div>
+        </div>
+        <div class="flex items-center space-x-4 text-gray-700">
+            <div>ENCRYPTION: ACTIVE</div>
+            <div>NODE: {{room}}</div>
+            <div>USER: {{username}}</div>
+        </div>
+    </div>
+    
+    <!-- Main layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Left sidebar - Rooms list -->
+        <div class="w-56 bg-light-gray border-r border-hacker-green/20 flex flex-col">
+            <!-- App logo -->
+            <div class="p-3 border-b border-hacker-green/20 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-hacker-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <h1 class="text-sm font-bold tracking-wider text-hacker-green animate-text-pulse">onisoa#fitia_CHAT<span class="animate-blink">_</span></h1>
             </div>
-            <div class="container">
-                <input type="text" id="decryption_key" placeholder="Clé de déchiffrement" />
+            
+            <!-- Rooms list -->
+            <div class="p-2 flex-1 overflow-y-auto">
+                <div class="mb-2 px-2 text-xs text-hacker-green flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                    </svg>
+                    AVAILABLE_NODES
+                </div>
+                
+                <div class="space-y-1">
+                    {% for r in rooms %}
+                    <a
+                        href="{% url 'room' r.name %}"
+                        class="block p-2 rounded-md hover:bg-medium-green/50 transition-all duration-200 text-left relative overflow-hidden group hover-glitch flex items-center"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-2 text-hacker-green/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <span class="relative z-10 tracking-wide text-sm truncate text-gray-700">{{ r.name }}</span>
+                        {% if r.name == room %}
+                        <span class="ml-auto w-1.5 h-1.5 rounded-full bg-hacker-green"></span>
+                        {% endif %}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- User section -->
+            <div class="p-3 border-t border-hacker-green/20 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-md bg-medium-green border border-hacker-green/30 flex items-center justify-center text-hacker-green mr-2">
+                        {{ username|slice:":1" }}
+                    </div>
+                    <div class="text-xs">
+                        <div class="font-bold text-gray-800">{{ username }}</div>
+                        <div class="text-hacker-green">ONLINE</div>
+                    </div>
+                </div>
+                <a href="/logout" class="text-red-600 hover:text-red-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                </a>
             </div>
         </div>
-
-        <div class="rooms-container">
-            <h3>Salons disponibles</h3>
-            {% for r in rooms %}
-            <a href="{% url 'room' r.name %}" class="room-btn">{{ r.name }}</a>
-            {% endfor %}
+        
+        <!-- Main content area -->
+        <div class="flex-1 flex flex-col">
+            <!-- Channel header -->
+            <div class="h-12 border-b border-hacker-green/20 flex items-center px-4 justify-between bg-white">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-hacker-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <h2 class="text-sm font-bold text-gray-800">
+                        <span class="text-hacker-green">#</span>
+                        {{room}}
+                        <span class="text-gray-500 text-xs ml-2">:: SECURE_CHANNEL</span>
+                    </h2>
+                </div>
+                
+                <!-- Fake system stats -->
+                <div class="flex items-center space-x-4 text-xs text-gray-600">
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-hacker-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>ACTIVE: 42m</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-hacker-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span>USERS: 3</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Split content area -->
+            <div class="flex-1 flex overflow-hidden">
+                <!-- Messages area -->
+                <div class="flex-1 flex flex-col">
+                    <!-- Message display -->
+                    <div id="display" class="flex-1 overflow-y-auto p-4 hex-pattern-light">
+                        <p class="text-gray-500 text-sm">// No messages found in this channel</p>
+                        <!-- Messages will be loaded here by JavaScript -->
+                    </div>
+                    
+                    <!-- Message input area -->
+                    <div class="p-3 border-t border-hacker-green/20 bg-white">
+                        <form id="post-form" class="flex flex-col space-y-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="username" id="username" value="{{username}}" />
+                            <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}" />
+                            
+                            <div class="flex space-x-2">
+                                <div class="flex-1">
+                                    <input
+                                        type="text"
+                                        name="message"
+                                        id="message"
+                                        placeholder="Entrez votre message"
+                                        class="w-full bg-light-gray border border-hacker-green/30 rounded-md px-3 py-2 text-gray-800 placeholder-gray-500 focus:border-hacker-green/70 outline-none text-sm"
+                                    />
+                                </div>
+                                <button 
+                                    type="submit"
+                                    class="bg-hacker-green hover:bg-dark-green text-white px-3 py-2 rounded-md flex items-center transition-colors border border-hacker-green/30"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Right sidebar - Encryption panel -->
+                <div class="w-64 border-l border-hacker-green/20 flex flex-col bg-light-gray">
+                    <div class="p-3 border-b border-hacker-green/20">
+                        <h3 class="text-xs font-bold text-hacker-green flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                            ENCRYPTION_MODULE
+                        </h3>
+                    </div>
+                    
+                    <div class="p-3 space-y-4 flex-1">
+                        <!-- Encryption key -->
+                        <div class="space-y-1">
+                            <label class="text-xs text-hacker-green">ENCRYPTION_KEY</label>
+                            <input
+                                type="text"
+                                name="encryption_key"
+                                id="encryption_key"
+                                placeholder="Clé de chiffrement (optionnel)"
+                                class="w-full bg-white border border-hacker-green/30 rounded-md px-3 py-2 text-gray-800 placeholder-gray-500 text-xs"
+                            />
+                        </div>
+                        
+                        <!-- Decryption key -->
+                        <div class="space-y-1">
+                            <label class="text-xs text-hacker-green">DECRYPTION_KEY</label>
+                            <input
+                                type="text"
+                                id="decryption_key"
+                                placeholder="Clé de déchiffrement"
+                                class="w-full bg-white border border-hacker-green/30 rounded-md px-3 py-2 text-gray-800 placeholder-gray-500 text-xs"
+                            />
+                        </div>
+                        
+                        <!-- Fake security status -->
+                        <div class="mt-6 space-y-3">
+                            <div class="text-xs text-hacker-green">SECURITY_STATUS</div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-gray-700">Connection</span>
+                                    <span class="text-hacker-green font-semibold">SECURE</span>
+                                </div>
+                                <div class="w-full bg-white rounded-full h-1.5">
+                                    <div class="bg-hacker-green h-1.5 rounded-full" style="width: 100%"></div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-gray-700">Encryption</span>
+                                    <span class="text-hacker-green font-semibold">ACTIVE</span>
+                                </div>
+                                <div class="w-full bg-white rounded-full h-1.5">
+                                    <div class="bg-hacker-green h-1.5 rounded-full" style="width: 85%"></div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="text-gray-700">Firewall</span>
+                                    <span class="text-amber-600 font-semibold">MODERATE</span>
+                                </div>
+                                <div class="w-full bg-white rounded-full h-1.5">
+                                    <div class="bg-amber-500 h-1.5 rounded-full" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Fake terminal output -->
+                    <div class="p-3 border-t border-hacker-green/20">
+                        <div class="bg-code-bg p-2 rounded-md h-24 overflow-y-auto text-xs font-mono border border-hacker-green/20">
+                            <div class="text-gray-500">> system.check()</div>
+                            <div class="text-hacker-green">All systems operational</div>
+                            <div class="text-gray-500">> network.status()</div>
+                            <div class="text-hacker-green">Connected to: {{room}}</div>
+                            <div class="text-hacker-green">Ping: 23ms</div>
+                            <div class="text-gray-500">> security.scan()</div>
+                            <div class="text-hacker-green">No threats detected</div>
+                            <div class="text-gray-500 animate-pulse">> _</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
-
-    <!-- Pied de page -->
-    <footer>
-        &copy; 2024 Plateforme de Chat - Tous droits réservés
-    </footer>
+    </div>
+    
+    <!-- Bottom status bar -->
+    <div class="bg-light-green border-t border-hacker-green/30 py-1 px-4 flex items-center justify-between text-xs">
+        <div class="flex items-center space-x-4">
+            <div class="text-hacker-green font-semibold">[onisoa#fitia_CHAT v2.0.4]</div>
+            <div class="text-gray-700">STATUS: ONLINE</div>
+        </div>
+        <div class="text-gray-700">© 2025 All rights reserved</div>
+    </div>
+>>>>>>> 371a8e264009a8d8facb4428702c23cdaed42078
 
     <script type="text/javascript">
         $(document).on('submit', '#post-form', function(e) {
@@ -235,14 +399,27 @@
                     var isAtBottom = display.scrollTop() + display.innerHeight() >= display[0].scrollHeight;
                     $("#display").empty();
 
-                    for (var key in response.messages) {
-                        var rawDate = new Date(response.messages[key].date);
-                        var formattedDate = rawDate.toLocaleString('fr-FR', {
-                            day: 'numeric', month: 'short', year: 'numeric',
-                            hour: '2-digit', minute: '2-digit'
-                        });
-                        var temp = `<div class='darker'><b>${response.messages[key].user}</b><p>${response.messages[key].value}</p><span>${formattedDate}</span></div>`;
-                        $("#display").append(temp);
+                    if (Object.keys(response.messages).length === 0) {
+                        $("#display").append('<p class="text-gray-500 text-sm">// No messages found in this channel</p>');
+                    } else {
+                        for (var key in response.messages) {
+                            var rawDate = new Date(response.messages[key].date);
+                            var formattedDate = rawDate.toLocaleString('fr-FR', {
+                                day: 'numeric', month: 'short', year: 'numeric',
+                                hour: '2-digit', minute: '2-digit'
+                            });
+                            var temp = `
+                                <div class='mb-3 p-2 bg-white border-l-2 border-hacker-green/40 rounded-r-md hover:bg-light-green/30 transition-colors shadow-sm'>
+                                    <div class='flex items-center mb-1'>
+                                        <span class='font-bold text-hacker-green text-sm'>${response.messages[key].user}</span>
+                                        <span class='ml-auto text-xs text-gray-500'>${formattedDate}</span>
+                                    </div>
+                                    <p class='text-gray-700 break-words text-sm'>${response.messages[key].value}</p>
+                                </div>
+                            `;
+                            $("#display").append(temp);
+                        }
+
                     }
 
                     if (isAtBottom) {
@@ -256,4 +433,6 @@
         }, 500);
     </script>
 </body>
+
 </html>
+
